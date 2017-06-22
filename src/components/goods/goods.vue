@@ -11,10 +11,10 @@
     </div>
     <div class="foods-wrapper" ref="foodWrapper">
       <ul>
-        <li v-for="item in goods" class="food-list food-list-hook">
+        <li  v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item border-1px">
+            <li @click="selectFood(food,$event)" v-for="food in item.foods" class="food-item border-1px">
               <div class="icon">
                 <img :src="food.icon" width="57" height="57">
               </div>
@@ -27,13 +27,16 @@
                 <div class="price">
                   <span class="now">¥{{food.price}}</span><span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontroll-wrapper">
+                  <cartcontroll :add="addFood" :food="food"></cartcontroll>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 
 </template>
@@ -41,6 +44,7 @@
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
   import shopcart from 'components/shopcart/shopcart';
+  import cartcontroll from 'components/cartcontroll/cartcontroll';
 
   const ERR_OK = 0;
   export default {
@@ -66,6 +70,17 @@
           }
         }
         return 0;
+      },
+      selectFoods() {
+        let foods = [];
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
       }
     },
     created() {
@@ -90,9 +105,20 @@
         let el = foodList[index];
         this.foodsScroll.scrollToElement(el,300);
       },
+      selectFood(food, event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.selectedFood = food;
+//        this.$refs.food.show();
+      },
+      addFood(target) {
+        this._drop(target);
+      },
       _initScroll() {
         this.menuScroll = new BScroll(this.$refs.menuWrapper, {click: true});
         this.foodsScroll = new BScroll(this.$refs.foodWrapper, {
+          click: true,
           probeType: 3
         });
         this.foodsScroll.on('scroll', (pos) => {
@@ -111,7 +137,8 @@
       }
     },
     components: {
-      shopcart
+      shopcart,
+      cartcontroll
     }
   };
 </script>
@@ -219,4 +246,8 @@
               font-size: 10px
               color: rgb(147, 153, 159)
 
+          .cartcontroll-wrapper
+            position: absolute
+            right: 0
+            bottom: 12px
 </style>
