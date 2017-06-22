@@ -29,7 +29,8 @@
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
-    <div v-show="detailShow" class="detail">
+    <transition name="fade">
+      <div v-show="detailShow" class="detail">
       <div class="detail-wrapper clearfix">
         <div class="detail-main">
           <h1 class="name">{{seller.name}}</h1>
@@ -57,10 +58,11 @@
           </div>
         </div>
       </div>
-      <div class="detail-close">
+      <div class="detail-close" @click="hideDetail">
         <i class="icon-close"></i>
       </div>
     </div>
+    </transition>
   </div>
 </template>
 
@@ -81,6 +83,9 @@
     methods: {
       showDetail() {
         this.detailShow = true;
+      },
+      hideDetail() {
+        this.detailShow = false;
       }
     },
     created() {
@@ -172,8 +177,6 @@
           margin-left: 2px
           line-height: 24px
           font-size: 10px
-
-
     .bulletin-wrapper
       position: relative
       height: 28px
@@ -219,6 +222,12 @@
       height: 100%
       overflow: auto
       background: rgba(7,17,27,0.8)
+      -webkit-backdrop-filter: blur(10px)
+      &.fade-enter-active, &.fade-leave-active
+        transition: all 0.5s
+      &.fade-enter, &.fade-leave-active
+        opacity: 0
+        background: rgba(7,17,27,0)
       .detail-wrapper
         width: 100%
         min-height: 100%
