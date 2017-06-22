@@ -25,8 +25,7 @@
                   <span class="count">月售{{food.sellCount}}份</span><span>好评率{{food.rating}}</span>
                 </div>
                 <div class="price">
-                  <span class="now">¥{{food.price}}</span><span class="old"
-                                                                v-show="food.oldPrice">¥{{food.oldPrice}}</span>
+                  <span class="now">¥{{food.price}}</span><span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
               </div>
             </li>
@@ -34,12 +33,15 @@
         </li>
       </ul>
     </div>
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
+  import shopcart from 'components/shopcart/shopcart';
+
   const ERR_OK = 0;
   export default {
     props: {
@@ -107,6 +109,9 @@
           this.listHeight.push(height);
         }
       }
+    },
+    components: {
+      shopcart
     }
   };
 </script>
