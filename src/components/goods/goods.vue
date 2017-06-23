@@ -28,7 +28,7 @@
                   <span class="now">¥{{food.price}}</span><span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontroll-wrapper">
-                  <cartcontroll :add="addFood" :food="food"></cartcontroll>
+                  <cartcontroll @add="addFood" :food="food"></cartcontroll>
                 </div>
               </div>
             </li>
@@ -114,6 +114,12 @@
       },
       addFood(target) {
         this._drop(target);
+      },
+      _drop(target) {
+        // 体验优化,异步执行下落动画
+        this.$nextTick(() => {
+          this.$refs.shopcart.drop(target);
+        });
       },
       _initScroll() {
         this.menuScroll = new BScroll(this.$refs.menuWrapper, {click: true});

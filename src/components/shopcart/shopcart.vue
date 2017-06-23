@@ -70,7 +70,8 @@
           {
             show: false
           }
-        ]
+        ],
+        dropBalls: []
       };
     },
     computed: {
@@ -108,6 +109,7 @@
     },
     methods: {
       drop(el) {
+        console.log(el);
         for (let i = 0; i < this.balls.length; i++) {
           let ball = this.balls[i];
           if (!ball.show) {
@@ -182,13 +184,15 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixin.styl"
+
   .shopcart
     position: fixed
     left: 0
     bottom: 0
     z-index: 50
-    height: 48px
     width: 100%
+    height: 48px
     .content
       display: flex
       background: #141d27
@@ -212,8 +216,8 @@
             width: 100%
             height: 100%
             border-radius: 50%
-            background: #2b343c
             text-align: center
+            background: #2b343c
             &.highlight
               background: rgb(0, 160, 220)
             .icon-shopping_cart
@@ -226,8 +230,8 @@
             position: absolute
             top: 0
             right: 0
-            height: 16px
             width: 24px
+            height: 16px
             line-height: 16px
             text-align: center
             border-radius: 16px
@@ -246,15 +250,13 @@
           border-right: 1px solid rgba(255, 255, 255, 0.1)
           font-size: 16px
           font-weight: 700
-          color: rgba(255, 255, 255, 0.4)
           &.highlight
             color: #fff
         .desc
           display: inline-block
           vertical-align: top
-          line-height: 24px
           margin: 12px 0 0 12px
-          color: rgba(255, 255, 255, 0.4)
+          line-height: 24px
           font-size: 10px
       .content-right
         flex: 0 0 105px
@@ -283,5 +285,72 @@
           border-radius: 50%
           background: rgb(0, 160, 220)
           transition: all 0.4s linear
+    .shopcart-list
+      position: absolute
+      left: 0
+      top: 0
+      z-index: -1
+      width: 100%
+      transform: translate3d(0, -100%, 0)
+      &.fold-enter-active, &.fold-leave-active
+        transition: all 0.5s
+      &.fold-enter, &.fold-leave-active
+        transform: translate3d(0, 0, 0)
+      .list-header
+        height: 40px
+        line-height: 40px
+        padding: 0 18px
+        background: #f3f5f7
+        border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+        .title
+          float: left
+          font-size: 14px
+          color: rgb(7, 17, 27)
+        .empty
+          float: right
+          font-size: 12px
+          color: rgb(0, 160, 220)
 
+      .list-content
+        padding: 0 18px
+        max-height: 217px
+        overflow: hidden
+        background: #fff
+        .food
+          position: relative
+          padding: 12px 0
+          box-sizing: border-box
+          border-1px(rgba(7, 17, 27, 0.1))
+          .name
+            line-height: 24px
+            font-size: 14px
+            color: rgb(7, 17, 27)
+          .price
+            position: absolute
+            right: 90px
+            bottom: 12px
+            line-height: 24px
+            font-size: 14px
+            font-weight: 700
+            color: rgb(240, 20, 20)
+          .cartcontroll-wrapper
+            position: absolute
+            right: 0
+            bottom: 6px
+
+  .list-mask
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 40
+    backdrop-filter: blur(10px)
+    opacity: 1
+    background: rgba(7, 17, 27, 0.6)
+    &.fade-enter-active, &.fade-leave-active
+      transition: all 0.5s
+    &.fade-enter, &.fade-leave-active
+      opacity: 0
+      background: rgba(7, 17, 27, 0)
 </style>
